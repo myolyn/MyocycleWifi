@@ -12,6 +12,7 @@
 #define WIFI_HANDSHAKE          0xC0
 #define WIFI_STATUS             0xE2
 #define WIFI_CONNECTED          0x07
+
 #define WIFI_DISCONNECTED       0x09
 #define WIFI_PASSFAILED         0x0B
 #define WIFI_CONNECTING         0x0D
@@ -52,7 +53,8 @@
 #define WIFI_LOGIN_CHECK               0x74
 #define WIFI_LOGIN_SET                 0x75
 #define WIFI_LOGIN_LAST                0x76
-#define WIFI_SEND_STATUS               0x77
+#define WIFI_BEACON_SEND               0x77
+#define WIFI_CONNECTED_NO_INTERNET     0x78
 
 
 

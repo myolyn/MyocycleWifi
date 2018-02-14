@@ -2,7 +2,7 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2018-01-25 16:40:53
+//This file has been generated on 2018-02-13 14:57:09
 
 #include "Arduino.h"
 #include "Arduino.h"
@@ -12,8 +12,11 @@
 #include "Adafruit_FRAM_I2C.h"
 #include "states.h"
 #include "constants.h"
+#include "ESP8266Ping.h"
 
-void Wifi_Send_Command(volatile unsigned char *p, int size) ;
+bool isConnectedToInternet() ;
+void updateInternetConnectionStatus() ;
+void Wifi_Send_Command(volatile unsigned char * p, int size) ;
 void disconnect() ;
 void scan() ;
 bool SetDeviceModel() ;
@@ -26,7 +29,7 @@ bool getModel() ;
 bool uploadContactInfo(void) ;
 bool startWorkout(void) ;
 bool uploadWorkout(void) ;
-bool getWifiStatus(void) ;
+bool sendBeacon(void) ;
 void SetLoginDefault(void) ;
 byte merge(char MSB, char LSB) ;
 void FindChecksum() ;

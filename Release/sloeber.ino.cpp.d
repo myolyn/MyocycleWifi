@@ -38,7 +38,9 @@ sloeber.ino.cpp.o: ..\sloeber.ino.cpp \
  C:\sloeber\arduinoPlugin\packages\esp8266\hardware\esp8266\1.6.5-947-g39819f0\libraries\SPI/SPI.h \
  C:\sloeber\arduinoPlugin\packages\esp8266\hardware\esp8266\1.6.5-947-g39819f0\libraries\Wire/Wire.h \
  C:\sloeber\arduinoPlugin\packages\esp8266\hardware\esp8266\1.6.5-947-g39819f0\cores\esp8266/Stream.h \
- ..\Adafruit_FRAM_I2C.h ..\states.h ..\constants.h ..\MyocycleWifi.ino
+ ..\Adafruit_FRAM_I2C.h ..\states.h ..\constants.h ..\ESP8266Ping.h \
+ C:\sloeber\/arduinoPlugin/packages/esp8266/hardware/esp8266/1.6.5-947-g39819f0/tools/sdk//include/ping.h \
+ ..\ESP8266Ping.impl.h ..\MyocycleWifi.ino
 
 C:\sloeber\arduinoPlugin\packages\esp8266\hardware\esp8266\1.6.5-947-g39819f0\cores\esp8266/Arduino.h:
 
@@ -123,5 +125,11 @@ C:\sloeber\arduinoPlugin\packages\esp8266\hardware\esp8266\1.6.5-947-g39819f0\co
 ..\states.h:
 
 ..\constants.h:
+
+..\ESP8266Ping.h:
+
+C:\sloeber\/arduinoPlugin/packages/esp8266/hardware/esp8266/1.6.5-947-g39819f0/tools/sdk//include/ping.h:
+
+..\ESP8266Ping.impl.h:
 
 ..\MyocycleWifi.ino:
