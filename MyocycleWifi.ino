@@ -958,7 +958,7 @@ bool AppCode() {
       } else if (state == 4) {
         line5 = client.readStringUntilSize2(201);
         delay(1);
-        //Serial.println(line5);
+        Serial.println(line5);
         line5.toCharArray(AppCodeHex, 210);
         uint32_t i = 0;
         for (k = 0; k < 202; k = k + 2) {
@@ -975,10 +975,9 @@ bool AppCode() {
         state = 3;
       }
       state++;
-
       if (state > 5) {
 
-        state == 0;
+        state = 0;
         flag = 0;
       }
     }
@@ -990,7 +989,7 @@ bool AppCode() {
       i++;
     }
     // Serial.println();
-    //  Serial.println("AppCodeVersion Stored");
+    //Serial.println("AppCodeVersion Stored");
 
     i = 0;
     for (k = 0; k < 12; k = k + 2) {
@@ -1000,18 +999,12 @@ bool AppCode() {
     }
     ApplicationCodecheckSumFromServer = ((fram.read8(FRAM1, 0x2050) << 24) & 0xFF000000) | ((fram.read8(FRAM1, 0x2051) << 16) & 0x00FF0000) | ((fram.read8(FRAM1, 0x2052) << 8) & 0x0000FF00) | ((fram.read8(FRAM1, 0x2053) & 0xFF));
 
-    // Serial.println(AppCodeChecksumVar);
-    // Serial.println("AppCodeChecksum Stored");
 
     if (calculatedApplicationCodeChecksum != ApplicationCodecheckSumFromServer) {
-
-      // Serial.println("Downloaded Checksum Error! Retrying");
       ResetAppCode = true;
     }
 
     AppTotalBytes = AppCodeBytesVar;
-    // Serial.println(AppCodeBytesVar);
-    // Serial.println("AppCodeBytes Stored");
   } else {
     return false;
   }
@@ -1707,11 +1700,13 @@ void loop() {
 
   if (UpdateGo == true) {
     digitalWrite(C2000_XRS, HIGH); // C2000 Reset  true
+    Serial.println("Starting");
     while (!KernelCode());
     delay(50);
     while (!AppCode());
 
     if (!ResetAppCode) {
+    Serial.println("Starting Flash");
       delay(5000);
       //////////////////////////////////
       digitalWrite(C2000_TDO, HIGH);
