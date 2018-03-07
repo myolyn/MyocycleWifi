@@ -119,7 +119,7 @@ uint32_t AppBytesIndex = 0;
 uint32_t AppTotalBytes = 0;
 uint32_t txCount = 0;
 
-uint32_t downloadedChecksum = 0;
+uint32_t calculatedApplicationCodeChecksum = 0;
 uint32_t FramAddress = 0;
 
 uint32_t AppBlockSize = 0;
@@ -127,7 +127,7 @@ uint32_t AppBlockSize = 0;
 uint32_t ChecksumCounts = 0;
 
 String AppCodeVersionVar;
-uint32_t AppCodeChecksumVar = 0;
+uint32_t ApplicationCodecheckSumFromServer = 0;
 uint32_t AppCodeBytesVar = 0;
 
 uint8_t TestChecksumArray[1030];
@@ -935,17 +935,18 @@ bool AppCode() {
       if (state == 0) {
         line = client.readStringUntil('=');
       } else if (state == 1) {
+
         line2 = client.readStringUntil('#');
         AppCodeVersionVar = line2;
-        Serial.println(line2);
+        //Serial.println(line2);
         line2.toCharArray(AppCodeVersion, 20);
       } else if (state == 2) {
         line3 = client.readStringUntil('?');
-        Serial.println(line3);
+        //Serial.println(line3);
         line3.toCharArray(AppCodeChecksum, 20);
       } else if (state == 3) {
         line4 = client.readStringUntil('<');
-        Serial.println(line4);
+        //Serial.println(line4);
         line4.toCharArray(AppCodeBytes, 20);
         i = 0;
         for (k = 0; k < 12; k = k + 2) {
@@ -957,14 +958,14 @@ bool AppCode() {
       } else if (state == 4) {
         line5 = client.readStringUntilSize2(201);
         delay(1);
-        Serial.println(line5);
+        //Serial.println(line5);
         line5.toCharArray(AppCodeHex, 210);
         uint32_t i = 0;
         for (k = 0; k < 202; k = k + 2) {
           stored = merge(AppCodeHex[k], AppCodeHex[k + 1]);
           //calculate checksum after online download
           if (((loops * 101) + i) < AppCodeBytesVar) {
-            downloadedChecksum = downloadedChecksum + (stored & 0x00FF);
+            calculatedApplicationCodeChecksum = calculatedApplicationCodeChecksum + (stored & 0x00FF);
           }
 
           fram.write8(FRAM1, 0x2100 + (101 * loops) + i, stored);
@@ -976,6 +977,7 @@ bool AppCode() {
       state++;
 
       if (state > 5) {
+
         state == 0;
         flag = 0;
       }
@@ -996,12 +998,12 @@ bool AppCode() {
       fram.write8(FRAM1, 0x2050 + i, stored);
       i++;
     }
-    AppCodeChecksumVar = ((fram.read8(FRAM1, 0x2050) << 24) & 0xFF000000) | ((fram.read8(FRAM1, 0x2051) << 16) & 0x00FF0000) | ((fram.read8(FRAM1, 0x2052) << 8) & 0x0000FF00) | ((fram.read8(FRAM1, 0x2053) & 0xFF));
+    ApplicationCodecheckSumFromServer = ((fram.read8(FRAM1, 0x2050) << 24) & 0xFF000000) | ((fram.read8(FRAM1, 0x2051) << 16) & 0x00FF0000) | ((fram.read8(FRAM1, 0x2052) << 8) & 0x0000FF00) | ((fram.read8(FRAM1, 0x2053) & 0xFF));
 
     // Serial.println(AppCodeChecksumVar);
     // Serial.println("AppCodeChecksum Stored");
 
-    if (downloadedChecksum != AppCodeChecksumVar) {
+    if (calculatedApplicationCodeChecksum != ApplicationCodecheckSumFromServer) {
 
       // Serial.println("Downloaded Checksum Error! Retrying");
       ResetAppCode = true;
@@ -1735,7 +1737,7 @@ void loop() {
       //Serial.println("YOU NEED TO RESTART");
       UpdateGo = true;
     } else {
-      if ((AppTotalChecksum & 0xFFFF) != (AppCodeChecksumVar & 0xFFFF)) {
+      if ((AppTotalChecksum & 0xFFFF) != (ApplicationCodecheckSumFromServer & 0xFFFF)) {
         //Serial.println(AppTotalChecksum);
         //Serial.println(AppCodeChecksumVar);
         //Serial.println("YOU NEED TO RESTART...TOTAL CHECKSUM ERROR");
